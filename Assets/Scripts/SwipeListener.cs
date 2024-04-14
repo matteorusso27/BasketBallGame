@@ -7,28 +7,21 @@ public class SwipeListener : MonoBehaviour
     private float MIN_SWIPE = Screen.height / 20;
         
     [SerializeField]
-    private float   sensitivity = 5f;
-    private float   _minMoveDistance;
+    private float   sensitivity = 1f;
     private float   offsetY;
         
-    public Action         OnSwipeCancelled;
-    public Action<bool>   OnSwipeMeasured;
+    public Action         OnSwipeMeasured;
     public Action         OnSwipeDetection;
 
-    public  Vector3 _swipePoint;
+    public  Vector3 startingPoint;
 
-    private void Start()
-    {
-        UpdateSensitivity();
-    }
-
-    private void UpdateSensitivity()
-    {
-        _minMoveDistance = Screen.height / sensitivity;
-    }
+    private bool canListenToInputs = true;
+    public bool CanListenToInputs { get => canListenToInputs; set => canListenToInputs = value; }
 
     private void Update()
     {
+        if (!canListenToInputs) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             InitSwipe();
@@ -36,7 +29,7 @@ public class SwipeListener : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            CheckSwipe();
+            UpdateSwipe();
         }
 
         CheckSwipeCancellation();
@@ -44,33 +37,30 @@ public class SwipeListener : MonoBehaviour
             OnSwipeDetection?.Invoke();
     }
 
+    // This will be called just one time at the start of the swipe
+    private void InitSwipe()
+    {
+        startingPoint = Input.mousePosition;
+    }
+
     private void CheckSwipeCancellation()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            offsetY = Input.mousePosition.y - _swipePoint.y;
-            if (offsetY < MIN_SWIPE) return;
-            OnSwipeCancelled?.Invoke();
+            offsetY = Input.mousePosition.y - startingPoint.y;
+            if (offsetY >= MIN_SWIPE)
+            {
+                Debug.Log("annulla");
+                OnSwipeMeasured?.Invoke();
+            }
         }
     }
        
-    // This will be called just one time at the start of the swipe
-    private void InitSwipe()
+    private void UpdateSwipe()
     {
-        _swipePoint = Input.mousePosition;
+        offsetY = Input.mousePosition.y - startingPoint.y;
     }
-
-    private void CheckSwipe()
-    {
-        var offset = Input.mousePosition - _swipePoint;
-        if (offset.magnitude >= _minMoveDistance)
-        {
-            offsetY = offset.y;
-            var isSwipeUp = offsetY < 0? false : true;
-            OnSwipeMeasured?.Invoke(isSwipeUp);
-        }
-    }
-    public float GetSwipeStartingPoint() => _swipePoint.y;
+    public float GetSwipeStartingPoint() => startingPoint.y;
 
     public float GetNormalizedDistance()
     {
@@ -81,6 +71,6 @@ public class SwipeListener : MonoBehaviour
 
     public float GetCurrentSwipeDistance()
     {
-        return Mathf.Abs(Input.mousePosition.y - _swipePoint.y);
+        return Mathf.Abs(Input.mousePosition.y - startingPoint.y) * sensitivity;
     }
 }

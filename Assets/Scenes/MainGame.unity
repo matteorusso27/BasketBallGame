@@ -200,8 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SwipeListener: {fileID: 1827031335}
-  SwipingTime: 0.2
-  State: 0
+  SwipingTime: 0.8
 --- !u!4 &692031434
 Transform:
   m_ObjectHideFlags: 0
@@ -710,7 +709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MIN_SWIPE: 24
   sensitivity: 2
-  _swipePoint: {x: 0, y: 0, z: 0}
+  startingPoint: {x: 0, y: 0, z: 0}
 --- !u!4 &1827031336
 Transform:
   m_ObjectHideFlags: 0
