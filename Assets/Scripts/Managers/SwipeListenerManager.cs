@@ -1,11 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using System;
-// Manages the swipe detection
-public class SwipeManager : Singleton<SwipeManager>
+public class SwipeListenerManager : Singleton<SwipeListenerManager>
 {
     [SerializeField] private SwipeListener SwipeListener;
-    [SerializeField] private float SwipingTime = 0.8f;
+    [SerializeField] private float SwipingTime = 0.5f;
 
     private Coroutine allowedSwipeTimeCoroutine; //timeout
 
@@ -38,9 +36,20 @@ public class SwipeManager : Singleton<SwipeManager>
         }
     }
 
+    public void EnableListener()
+    {
+        SwipeListener.CanListenToInputs = true;
+    }
+
     private IEnumerator CoroutineSwipeDetection()
     {
         yield return new WaitForSeconds(SwipingTime);
         if (!swipeMeasured) OnSwipeFinished();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            EnableListener();
     }
 }
