@@ -1,5 +1,9 @@
+using System;
+
 public class GameManager : Singleton<GameManager>
 {
+    public Action<GameState> OnBeforeStateChanged;
+    public Action<GameState> OnAfterStateChanged;
     public GameState State { get; private set; }
 
     public enum GameState
@@ -13,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     public void StartGame() => ChangeState(GameState.Start);
     private void ChangeState(GameState newState)
     {
-        //OnBeforeStateChanged?.Invoke(newState);
+        OnBeforeStateChanged?.Invoke(newState);
         State = newState;
         switch (newState)
         {
@@ -26,6 +30,6 @@ public class GameManager : Singleton<GameManager>
             case GameState.End:
                 break;
         }
-        //OnAfterStateChanged?.Invoke(newState);
+        OnAfterStateChanged?.Invoke(newState);
     }
 }

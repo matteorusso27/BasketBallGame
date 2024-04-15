@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using static GameManager;
+using static Selectors;
 public class SwipeListenerManager : Singleton<SwipeListenerManager>
 {
     [SerializeField] private SwipeListener SwipeListener;
@@ -12,6 +14,7 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
     {
         SwipeListener.OnSwipeDetection += OnSwipeDetection;
         SwipeListener.OnSwipeMeasured += OnSwipeFinished;
+        GameM.OnBeforeStateChanged += HandleListener;
     }
 
     private void OnDisable()
@@ -36,9 +39,9 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
         }
     }
 
-    public void EnableListener()
+    public void HandleListener(GameState state)
     {
-        SwipeListener.CanListenToInputs = true;
+        SwipeListener.CanListenToInputs = state == GameState.ShootingPhase;
     }
 
     private IEnumerator CoroutineSwipeDetection()
@@ -50,6 +53,6 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            EnableListener();
+            HandleListener();
     }
 }

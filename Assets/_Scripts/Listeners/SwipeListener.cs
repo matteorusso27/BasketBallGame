@@ -16,7 +16,7 @@ public class SwipeListener : MonoBehaviour
     public  Vector3 startingPoint;
 
     private bool canListenToInputs = true;
-    public bool CanListenToInputs { get => canListenToInputs; set => canListenToInputs = value; }
+    public  bool CanListenToInputs { get => canListenToInputs; set => canListenToInputs = value; }
 
     private void Update()
     {
@@ -34,7 +34,9 @@ public class SwipeListener : MonoBehaviour
 
         CheckSwipeCancellation();
         if (Input.GetKey(KeyCode.Mouse0))
+        {
             OnSwipeDetection?.Invoke();
+        }
     }
 
     // This will be called just one time at the start of the swipe
@@ -50,7 +52,6 @@ public class SwipeListener : MonoBehaviour
             offsetY = Input.mousePosition.y - startingPoint.y;
             if (offsetY >= MIN_SWIPE)
             {
-                Debug.Log("annulla");
                 OnSwipeMeasured?.Invoke();
             }
         }
