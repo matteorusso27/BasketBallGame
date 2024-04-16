@@ -16,7 +16,7 @@ public class ResourceSystem : Singleton<ResourceSystem>
 
     private void AssembleResources()
     {
-        Balls = Resources.LoadAll<ScriptableBall>("BallsPrototypes/ScriptableBall").ToList();
+        Balls = Resources.LoadAll<ScriptableBall>("BallsPrototypes").ToList();
         _BallsDictionary = Balls.ToDictionary(t => t.Type);
     }
 

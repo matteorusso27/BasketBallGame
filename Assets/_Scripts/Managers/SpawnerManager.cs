@@ -8,6 +8,8 @@ public class SpawnerManager : Singleton<SpawnerManager>
     {
         var ballPosition = new Vector3(0,0,0);
         var ballScriptable = ResourceSystem.Instance.GetBalls(t);
-        return Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity).gameObject;
+        var toSpawn = Instantiate(ballScriptable.Prefab, ballPosition, Quaternion.identity).gameObject;
+        toSpawn.GetComponent<Renderer>().material = ballScriptable.Material;
+        return toSpawn;
     }
 }

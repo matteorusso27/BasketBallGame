@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c550024453a04464291f2b6d03c7798a, type: 3}
   m_Name: FireBall
   m_EditorClassIdentifier: 
-  Ball: 0
-  prefab: {fileID: 0}
-  texture: {fileID: 0}
+  Type: 1
+  Faction: 0
+  Prefab: {fileID: 0}
+  Material: {fileID: 0}
   VFX: {fileID: 0}

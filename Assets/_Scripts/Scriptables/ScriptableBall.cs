@@ -5,10 +5,10 @@ public class ScriptableBall : ScriptableObject
 {
     public BallType Type;
 
-    public Faction faction;
+    public Faction Faction;
 
-    public Ball prefab;
-    public Texture texture;
+    public Ball Prefab;
+    public Material Material;
 }
 
 public enum Faction

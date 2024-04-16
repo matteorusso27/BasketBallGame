@@ -1,5 +1,6 @@
 using System;
-
+using static Selectors;
+using static GameSettings;
 public class GameManager : Singleton<GameManager>
 {
     public Action<GameState> OnBeforeStateChanged;
@@ -13,8 +14,10 @@ public class GameManager : Singleton<GameManager>
         ShootingPhase = 2,
         End = 3
     }
-    public void Start() => ChangeState(GameState.Start);
-    public void StartGame() => ChangeState(GameState.Start);
+    public void Start()
+    {
+        ChangeState(GameState.Start);
+    }
     private void ChangeState(GameState newState)
     {
         OnBeforeStateChanged?.Invoke(newState);
@@ -22,8 +25,10 @@ public class GameManager : Singleton<GameManager>
         switch (newState)
         {
             case GameState.Start:
+                HandleStart();
                 break;
             case GameState.SpawningInstances:
+                HandleSpawning();
                 break;
             case GameState.ShootingPhase:
                 break;
@@ -31,5 +36,16 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         OnAfterStateChanged?.Invoke(newState);
+    }
+
+    private void HandleSpawning()
+    {
+        SpawnerM.SpawnBall(BallType.Regular);
+        SpawnerM.SpawnBall(BallType.FireBall);
+    }
+
+    private void HandleStart()
+    {
+        ChangeState(GameState.SpawningInstances);
     }
 }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001d2213c5bce814c9960d804c9329a0, type: 3}
   m_Name: RegularBall
   m_EditorClassIdentifier: 
-  Ball: 0
-  prefab: {fileID: 0}
-  texture: {fileID: 0}
+  Type: 0
+  Faction: 0
+  Prefab: {fileID: 6096865293899599318, guid: 79cfbd6e7d251a04b9039b1ef99cf5a9, type: 3}
+  Material: {fileID: 2100000, guid: f8287fcc4e04c1d49a5897cd0aae9010, type: 2}
