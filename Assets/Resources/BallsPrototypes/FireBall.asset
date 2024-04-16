@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Faction: 0
-  Prefab: {fileID: 0}
-  Material: {fileID: 0}
+  Prefab: {fileID: 6096865293899599318, guid: 43ebaff2bda6d2246aa8eeeef21a1950, type: 3}
+  Material: {fileID: 2100000, guid: f1705fe961096ec4199cae1fee982237, type: 2}
   VFX: {fileID: 0}
