@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 using static GameManager;
 using static Selectors;
 public class SwipeListenerManager : Singleton<SwipeListenerManager>
@@ -9,14 +10,18 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
 
     private Coroutine allowedSwipeTimeCoroutine; //timeout
 
+    public Action<float> SwipeMeasured;
     private bool swipeMeasured;
     private void OnEnable()
     {
         SwipeListener.OnSwipeDetection += OnSwipeDetection;
         SwipeListener.OnSwipeMeasured += OnSwipeFinished;
-        GameM.OnBeforeStateChanged += HandleListener;
     }
 
+    private void Start()
+    {
+        GameM.OnBeforeStateChanged += HandleListener;
+    }
     private void OnDisable()
     {
         SwipeListener.OnSwipeDetection -= OnSwipeDetection;
@@ -28,6 +33,7 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
         allowedSwipeTimeCoroutine = null;
         swipeMeasured = true;
         SwipeListener.CanListenToInputs = false;
+        SwipeMeasured?.Invoke(SwipeListener.GetNormalizedDistance());
     }
 
     public void OnSwipeDetection()
