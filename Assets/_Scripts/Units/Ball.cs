@@ -1,7 +1,7 @@
-using System.Collections;
 using UnityEngine;
+using System;
 using static GameSettings;
-using static Selectors;
+using static Helpers;
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour, IMoveable
 {
@@ -10,23 +10,17 @@ public class Ball : MonoBehaviour, IMoveable
     public  BallType BallType;
     public  Faction  Faction;
 
+    public Action<Ball>   OnBallGrounded;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        EnableKinematicMode();
+        rb.isKinematic = true;
     }
 
-    // Ball movement is split in a deterministic parabolic movement
-    // and a simulation of physics until it touches the ground
     public void SimulatePhysicsMode()
     {
         rb.isKinematic = false;
         rb.useGravity = true;
-    }
-
-    public void EnableKinematicMode()
-    {
-        rb.isKinematic = true;
     }
 
     public void Move(Vector3 toPosition)
@@ -42,6 +36,14 @@ public class Ball : MonoBehaviour, IMoveable
     public void SetPosition(Vector3 targetPosition)
     {
         transform.position = targetPosition;
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag(GameTagToString(GameTag.Terrain)))
+        {
+            OnBallGrounded?.Invoke(this);
+            rb.isKinematic = true;
+        }
     }
 }
 

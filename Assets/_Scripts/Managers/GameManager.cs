@@ -84,10 +84,17 @@ public class GameManager : Singleton<GameManager>
 
     private void HandlePlayerBallMovement(float normalizedDistance)
     {
+        void ResetPlayerBall(Ball ball)
+        {
+            ball.SetPosition(new Vector3(0, 0, 0));
+            SwipeM.HandleListener(State);
+            ball.OnBallGrounded -= ResetPlayerBall;
+        }
         if (State != GameState.ShootingPhase) return;
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
         playerBall.SetPosition(new Vector3(0, 0, 0));
         var finalPosition = new Vector3(0, 0, 10);
         playerBall.Move(finalPosition);
+        playerBall.OnBallGrounded += ResetPlayerBall;
     }
 }
