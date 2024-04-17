@@ -13,6 +13,7 @@ public class ScriptableBall : ScriptableObject
 
 public enum Faction
 {
+    NONE,
     Player,
     Enemy
 }
