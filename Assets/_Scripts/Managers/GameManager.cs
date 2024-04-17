@@ -3,9 +3,11 @@ using UnityEngine;
 using static Selectors;
 using static GameSettings;
 using System.Collections;
-
+[RequireComponent(typeof(ShootingPhase))]
 public class GameManager : Singleton<GameManager>
 {
+    private ShootingPhase ShootingPhase;
+
     public Action<GameState> OnBeforeStateChanged;
     public Action<GameState> OnAfterStateChanged;
 
@@ -18,9 +20,12 @@ public class GameManager : Singleton<GameManager>
         ShootingPhase = 2,
         End = 3
     }
-    private void OnEnable()
+
+    private void Awake()
     {
-        SwipeM.SwipeMeasured += HandlePlayerBallMovement;
+        ShootingPhase = GetComponent<ShootingPhase>();
+        ShootingPhase.enabled = false;
+        base.Awake();
     }
     public void Start()
     {
@@ -49,25 +54,16 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleShooting()
     {
+        ShootingPhase.enabled = true;
+        ShootingPhase.Init();
         StartCoroutine(ChangeStateAfter(10f, GameState.End));
-        StartCoroutine(MoveEnemyBall());
     }
 
     private IEnumerator ChangeStateAfter(float timer, GameState newState)
     {
         yield return new WaitForSeconds(timer);
-        ChangeState(newState);
-    }
-    private IEnumerator MoveEnemyBall()
-    {
-        while (State == GameState.ShootingPhase)
-        {
-            var enemyBall = SpawnerM.GetBallOfFaction(Faction.Enemy);
-            var finalPosition = new Vector3(2, 0, 10);
-            enemyBall.Move(finalPosition);
-            yield return new WaitForSeconds(5f);
-            enemyBall.SetPosition(new Vector3(2, 0, 0));
-        }
+        GameM.ChangeState(newState);
+        ShootingPhase.enabled = false;
     }
 
     private void HandleSpawning()
@@ -80,21 +76,5 @@ public class GameManager : Singleton<GameManager>
     private void HandleStart()
     {
         ChangeState(GameState.SpawningInstances);
-    }
-
-    private void HandlePlayerBallMovement(float normalizedDistance)
-    {
-        void ResetPlayerBall(Ball ball)
-        {
-            ball.SetPosition(new Vector3(0, 0, 0));
-            SwipeM.HandleListener(State);
-            ball.OnBallGrounded -= ResetPlayerBall;
-        }
-        if (State != GameState.ShootingPhase) return;
-        var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
-        playerBall.SetPosition(new Vector3(0, 0, 0));
-        var finalPosition = new Vector3(0, 0, 10);
-        playerBall.Move(finalPosition);
-        playerBall.OnBallGrounded += ResetPlayerBall;
     }
 }
