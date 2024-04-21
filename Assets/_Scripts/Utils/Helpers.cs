@@ -6,7 +6,9 @@ public class Helpers : MonoBehaviour
 {
     public enum GameTag
     {
-        Terrain
+        Terrain,
+        Hoop,
+        ScoreUpdater
     }
 
     public static string GameTagToString(GameTag gt) => gt.ToString();  
