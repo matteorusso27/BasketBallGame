@@ -3,6 +3,15 @@ using UnityEngine;
 using static Selectors;
 using static GameSettings;
 using System.Collections;
+
+public enum GameState
+{
+    Start = 0,
+    SpawningInstances = 1,
+    ShootingPhase = 2,
+    End = 3
+}
+
 [RequireComponent(typeof(ShootingPhase))]
 public class GameManager : Singleton<GameManager>
 {
@@ -12,14 +21,6 @@ public class GameManager : Singleton<GameManager>
     public Action<GameState> OnAfterStateChanged;
 
     public GameState State { get; private set; }
-
-    public enum GameState
-    {
-        Start = 0,
-        SpawningInstances = 1,
-        ShootingPhase = 2,
-        End = 3
-    }
 
     private void Awake()
     {

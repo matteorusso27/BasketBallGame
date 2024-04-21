@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static GameManager;
 using static Selectors;
 public class ShootingPhase : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class ShootingPhase : MonoBehaviour
         SwipeM.SwipeMeasured += HandlePlayerBallMovement;
         StartCoroutine(MoveEnemyBall());
     }
-    
+
     private IEnumerator MoveEnemyBall()
     {
         while (GameM.State == GameState.ShootingPhase)
