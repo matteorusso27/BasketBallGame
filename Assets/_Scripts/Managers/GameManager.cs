@@ -57,7 +57,7 @@ public class GameManager : Singleton<GameManager>
     {
         ShootingPhase.enabled = true;
         ShootingPhase.Init();
-        StartCoroutine(ChangeStateAfter(10f, GameState.End));
+        StartCoroutine(ChangeStateAfter(50f, GameState.End));
     }
 
     private IEnumerator ChangeStateAfter(float timer, GameState newState)

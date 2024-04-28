@@ -3,17 +3,15 @@ using UnityEngine;
 
 public class SwipeListener : MonoBehaviour
 {
-    [SerializeField] 
     private float MIN_SWIPE = Screen.height / 20;
         
-    [SerializeField]
     private float   sensitivity = 1f;
     private float   offsetY;
         
     public Action         OnSwipeMeasured;
     public Action         OnSwipeDetection;
 
-    public  Vector3 startingPoint;
+    private  Vector3 startingPoint;
 
     private bool canListenToInputs = true;
     public  bool CanListenToInputs { get => canListenToInputs; set => canListenToInputs = value; }
