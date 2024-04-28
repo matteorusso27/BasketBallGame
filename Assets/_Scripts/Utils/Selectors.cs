@@ -4,4 +4,5 @@ public static class Selectors
     public static SpawnerManager SpawnerM => SpawnerManager.Instance;
     public static SwipeListenerManager SwipeM => SwipeListenerManager.Instance;
     public static RangeManager RangeM => RangeManager.Instance;
+    public static ScoreManager ScoreM => ScoreManager.Instance;
 }

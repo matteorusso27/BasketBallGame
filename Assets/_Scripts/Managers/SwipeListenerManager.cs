@@ -35,12 +35,6 @@ public class SwipeListenerManager : Singleton<SwipeListenerManager>
         SwipeListener.CanListenToInputs = false;
         var normDistance = SwipeListener.GetNormalizedDistance();
         SwipeMeasured?.Invoke(normDistance);
-
-        Debug.Log("-------------");
-        Debug.Log("Is perfect: " + RangeM.IsInsidePerfectRange(normDistance));
-        Debug.Log("Is regular: " + RangeM.IsRegularRange(normDistance));
-        Debug.Log("Is board: " + RangeM.IsBoardShoot(normDistance));
-        Debug.Log("-------------");
     }
 
     public void OnSwipeDetection()

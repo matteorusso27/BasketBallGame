@@ -35,9 +35,15 @@ public class ShootingPhase : MonoBehaviour
             ball.OnBallGrounded -= ResetPlayerBall;
         }
         if (GameM.State != GameState.ShootingPhase) return;
+
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
-        playerBall.SetPosition(new Vector3(0, 0, 0));
-        var finalPosition = new Vector3(0, 0, 10);
+        Vector3 finalPosition;
+        if (RangeM.IsInsidePerfectRange(normalizedDistance) || RangeM.IsRegularRange(normalizedDistance))
+            finalPosition = new Vector3(0, 0, 10);
+        else if (RangeM.IsBoardShoot(normalizedDistance))
+            finalPosition = new Vector3(0, 8, 10);
+        else
+            finalPosition = new Vector3(0, 0, 3);
         playerBall.Move(finalPosition);
         playerBall.OnBallGrounded += ResetPlayerBall;
     }

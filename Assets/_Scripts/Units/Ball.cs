@@ -11,6 +11,7 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
     public  Faction  Faction;
 
     public Action<Ball>   OnBallGrounded;
+    public Action<int>    OnScoreUpdate;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -25,7 +26,7 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
 
     public void Move(Vector3 toPosition)
     {
-        StartCoroutine(ParabolicMovement.ParabolicMotion(this, new Vector3(0, 0, 10)));
+        StartCoroutine(ParabolicMovement.ParabolicMotion(this, toPosition));
     }
 
     public Vector3 CurrentPosition()
@@ -50,7 +51,7 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
     {
         if (other.CompareTag(GameTagToString(GameTag.ScoreUpdater)))
         {
-            Debug.Log("Bravo stupido hai fatto punto");
+            OnScoreUpdate?.Invoke(2);
         }
     }
 }

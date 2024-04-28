@@ -71,6 +71,7 @@ public class GameManager : Singleton<GameManager>
     {
         SpawnerM.SpawnBall(BallType.Regular, new Vector3(0,0,0), Faction.Player);
         SpawnerM.SpawnBall(BallType.Regular, new Vector3(1, 0, 0), Faction.Enemy);
+        ScoreM.Init();
         ChangeState(GameState.ShootingPhase);
     }
 
