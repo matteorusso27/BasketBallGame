@@ -17,18 +17,20 @@ public class ScoreManager : Singleton<ScoreManager>
         playerBall.OnScoreUpdate += UpdatePlayerScore;
         enemyBall.OnScoreUpdate += UpdateEnemyScore;
 
-        UpdatePlayerScore(0);
-        UpdateEnemyScore(0);
+        PlayerScoreUpdate?.Invoke(0);
+        EnemyScoreUpdate?.Invoke(0);
     }
 
-    public void UpdatePlayerScore(int score)
+    public void UpdatePlayerScore()
     {
+        var score = GameM.ShootingPhase.PlayerShoot == ShootingPhase.ShootType.Perfect ? 3 : 2;
         playerScore += score;
         PlayerScoreUpdate?.Invoke(playerScore);
     }
 
-    public void UpdateEnemyScore(int score)
+    public void UpdateEnemyScore()
     {
+        var score = GameM.ShootingPhase.EnemyShoot == ShootingPhase.ShootType.Perfect ? 3 : 2;
         enemyScore += score;
         EnemyScoreUpdate?.Invoke(enemyScore);
     }

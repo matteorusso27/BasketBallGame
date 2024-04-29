@@ -15,13 +15,14 @@ public enum GameState
 [RequireComponent(typeof(ShootingPhase))]
 public class GameManager : Singleton<GameManager>
 {
-    private ShootingPhase ShootingPhase;
+    public ShootingPhase ShootingPhase;
 
     public Action<GameState> OnBeforeStateChanged;
     public Action<GameState> OnAfterStateChanged;
+    public Action<int>       OnTimerChange;
 
     public GameState State { get; private set; }
-
+    private const int shootingPhaseTimer = 50;
     private void Awake()
     {
         ShootingPhase = GetComponent<ShootingPhase>();
@@ -57,12 +58,17 @@ public class GameManager : Singleton<GameManager>
     {
         ShootingPhase.enabled = true;
         ShootingPhase.Init();
-        StartCoroutine(ChangeStateAfter(50f, GameState.End));
+        StartCoroutine(ShootingPhaseTimer(shootingPhaseTimer, GameState.End));
     }
 
-    private IEnumerator ChangeStateAfter(float timer, GameState newState)
+    private IEnumerator ShootingPhaseTimer(int timer, GameState newState)
     {
-        yield return new WaitForSeconds(timer);
+        int currentTime = 0;
+        while (currentTime < timer)
+        {
+            OnTimerChange?.Invoke(timer - currentTime++);
+            yield return new WaitForSeconds(1f);
+        }
         GameM.ChangeState(newState);
         ShootingPhase.enabled = false;
     }

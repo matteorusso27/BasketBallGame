@@ -11,7 +11,7 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
     public  Faction  Faction;
 
     public Action<Ball>   OnBallGrounded;
-    public Action<int>    OnScoreUpdate;
+    public Action    OnScoreUpdate;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -51,7 +51,7 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
     {
         if (other.CompareTag(GameTagToString(GameTag.ScoreUpdater)))
         {
-            OnScoreUpdate?.Invoke(2);
+            OnScoreUpdate?.Invoke();
         }
     }
 }

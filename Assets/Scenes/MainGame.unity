@@ -336,6 +336,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 300926479}
+  - component: {fileID: 300926480}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -360,6 +361,21 @@ Transform:
   - {fileID: 1592314627}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &300926480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300926478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5df5b85075904dd4abc9c41f5bad255f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Time: {fileID: 1416849256}
+  PlayerScore: {fileID: 1625376138}
+  EnemyScore: {fileID: 797921135}
 --- !u!1 &416573011
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,7 +713,7 @@ GameObject:
   - component: {fileID: 797921136}
   - component: {fileID: 797921135}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EnemyScoreTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1363,7 +1379,7 @@ GameObject:
   - component: {fileID: 1416849257}
   - component: {fileID: 1416849256}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: TimeTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1572,7 +1588,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1592314627}
   - component: {fileID: 1592314629}
-  - component: {fileID: 1592314628}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -1595,20 +1610,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 300926479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1592314628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1592314626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5df5b85075904dd4abc9c41f5bad255f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerScore: {fileID: 1625376138}
-  EnemyScore: {fileID: 797921135}
 --- !u!114 &1592314629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1633,7 +1634,7 @@ GameObject:
   - component: {fileID: 1625376139}
   - component: {fileID: 1625376138}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PlayerScoreTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2287,6 +2288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50c81923fb0b65499a59126ffb8207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShootingPhase: {fileID: 0}
 --- !u!4 &1950658420
 Transform:
   m_ObjectHideFlags: 0

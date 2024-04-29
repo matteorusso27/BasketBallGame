@@ -18,7 +18,7 @@ public class ParabolicMovement : MonoBehaviour
         // Loop until the desired point and the ball gets close enough
         while (distance >= 0.5f)
         {
-            float timeScaleFactor = 0.85f - Mathf.Clamp01(time / totalTime);
+            float timeScaleFactor = 1f - Mathf.Clamp01(time / totalTime);
 
             time += Time.deltaTime * timeScaleFactor;
             obj.SetPosition(curve.Evaluate(time));
