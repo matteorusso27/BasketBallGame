@@ -11,7 +11,7 @@ public class UIPresenter : MonoBehaviour
     public TMP_Text EnemyScore;
     public Image    EnergyBar;
 
-    private float fillAmount = 0.25f;
+    private float fillAmount = 1f;
     private void Start()
     {
         ScoreM.PlayerScoreUpdate += OnPlayerScore; 

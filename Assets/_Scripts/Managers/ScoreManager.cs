@@ -7,14 +7,16 @@ using static Helpers;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    public Action<int,int> PlayerScoreUpdate;
-    public Action<int> EnemyScoreUpdate;
-    public Action      OnBoardHit;
+    public Action<int,int>  PlayerScoreUpdate;
+    public Action<int>      EnemyScoreUpdate;
+    public Action           OnBoardHit;
 
     private int playerScore;
     private int enemyScore;
     private int playerEnergyBar;
     public ShootingPhase ShootingPhase;
+    public bool IsPlayerEnergyBarFull { get => playerEnergyBar >=1; }
+
     public void Init()
     {
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
@@ -22,8 +24,10 @@ public class ScoreManager : Singleton<ScoreManager>
         ShootingPhase = GameM.ShootingPhase;
 
         ShootingPhase.OnPlayerMissing += ResetPlayerEnergyBar;
+        ShootingPhase.OnNewPlayerBall += () => playerBall.OnScoreUpdate += UpdatePlayerScore;
 
         playerBall.OnScoreUpdate += UpdatePlayerScore;
+        playerBall.OnDestroyBall += () => playerBall.OnScoreUpdate -= UpdatePlayerScore;
         enemyBall.OnScoreUpdate += UpdateEnemyScore;
 
         playerEnergyBar = 0;
@@ -51,6 +55,7 @@ public class ScoreManager : Singleton<ScoreManager>
     public void UpdatePlayerScore()
     {
         var score = GetScore(GameM.ShootingPhase.PlayerShoot);
+        if (IsFireBall(SpawnerM.GetBallOfFaction(Faction.Player))) score *= 2;
         playerScore += score;
         PlayerScoreUpdate?.Invoke(playerScore, ++playerEnergyBar);
     }

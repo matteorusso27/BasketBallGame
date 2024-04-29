@@ -28,4 +28,10 @@ public class SpawnerManager : Singleton<SpawnerManager>
         var go = SpawnedBalls().Where(x => x.GetComponent<Ball>().Faction == faction).FirstOrDefault();
         return go.GetComponent<Ball>();
     }
+
+    public void RemoveBallOfFaction(Faction faction)
+    {
+        var toRemove = GetBallOfFaction(faction);
+        spawnedObjects.Remove(toRemove.gameObject);
+    }
 }

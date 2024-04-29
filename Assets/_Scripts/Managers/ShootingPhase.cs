@@ -21,6 +21,7 @@ public class ShootingPhase : MonoBehaviour
     public bool IsBoardBlinking { get; private set; }
 
     public Action OnPlayerMissing;
+    public Action OnNewPlayerBall;
     
     private void OnDisable()
     {
@@ -78,8 +79,15 @@ public class ShootingPhase : MonoBehaviour
     private void ResetPlayerBall(Ball ball)
     {
         ball.SetPosition(new Vector3(0, 0, 0));
-        SwipeM.HandleListener(GameM.State);
         ball.OnBallGrounded -= ResetPlayerBall;
+        SwipeM.HandleListener(GameM.State);
+        if (ScoreM.IsPlayerEnergyBarFull && ball.BallType == GameSettings.BallType.Regular)
+        {
+            SpawnerM.RemoveBallOfFaction(Faction.Player);
+            Destroy(ball.gameObject);
+            SpawnerM.SpawnBall(GameSettings.BallType.FireBall, new Vector3(0, 0, 0), Faction.Player);
+            OnNewPlayerBall?.Invoke();
+        }
     }
 
     private ShootType GetShootType(float normalizedDistance)

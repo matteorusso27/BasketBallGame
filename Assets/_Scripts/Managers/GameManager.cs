@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     public GameState State { get; private set; }
     private const int shootingPhaseTimer = 50;
-    private void Awake()
+    private new void Awake()
     {
         ShootingPhase = GetComponent<ShootingPhase>();
         ShootingPhase.enabled = false;

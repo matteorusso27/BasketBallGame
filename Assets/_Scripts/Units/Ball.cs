@@ -11,7 +11,8 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
     public  Faction  Faction;
 
     public Action<Ball>   OnBallGrounded;
-    public Action    OnScoreUpdate;
+    public Action         OnScoreUpdate;
+    public Action         OnDestroyBall;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,6 +54,11 @@ public class Ball : MonoBehaviour, IMoveable, ICollisionable
         {
             OnScoreUpdate?.Invoke();
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyBall?.Invoke();
     }
 }
 
