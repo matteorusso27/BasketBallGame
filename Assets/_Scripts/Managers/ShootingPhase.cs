@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,10 @@ public class ShootingPhase : MonoBehaviour
     public ShootType PlayerShoot { get; private set; }
     public ShootType EnemyShoot { get; private set; }
     
+    public bool IsBoardBlinking { get; private set; }
+
+    public Action OnPlayerMissing;
+    
     private void OnDisable()
     {
         SwipeM.SwipeMeasured -= HandlePlayerBallMovement;
@@ -24,7 +29,9 @@ public class ShootingPhase : MonoBehaviour
     public void Init()
     {
         SwipeM.SwipeMeasured += HandlePlayerBallMovement;
+        ScoreM.OnBoardHit += () => { IsBoardBlinking = false; ChangeBoardBlinking(); };
         StartCoroutine(MoveEnemyBall());
+        StartCoroutine(BoardBlinkingTimer());
     }
 
     private IEnumerator MoveEnemyBall()
@@ -40,13 +47,30 @@ public class ShootingPhase : MonoBehaviour
         }
     }
 
+    private IEnumerator BoardBlinkingTimer()
+    {
+        while (GameM.State == GameState.ShootingPhase)
+        {
+            IsBoardBlinking = GetRandomNumber(0, 10) > 6;
+            ChangeBoardBlinking();
+            yield return new WaitForSeconds(5f);
+        }
+    }
+
+    private void ChangeBoardBlinking()
+    {
+        var hoop = GameObject.FindGameObjectWithTag(GameTagToString(GameTag.Hoop));
+        hoop.GetComponent<Renderer>().material.color = IsBoardBlinking ? Color.blue : Color.white;
+    }
+
     private void HandlePlayerBallMovement(float normalizedDistance)
     {
         if (GameM.State != GameState.ShootingPhase) return;
 
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
         PlayerShoot = GetShootType(normalizedDistance);
-        
+
+        if (PlayerShoot == ShootType.Fail) OnPlayerMissing?.Invoke();
         playerBall.Move(GetFinalShootPosition(PlayerShoot));
         playerBall.OnBallGrounded += ResetPlayerBall;
     }
