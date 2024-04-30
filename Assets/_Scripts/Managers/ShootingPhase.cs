@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Selectors;
 using static Helpers;
+using static GameSettings;
+
 public class ShootingPhase : MonoBehaviour
 {
     public enum ShootType
@@ -76,17 +78,27 @@ public class ShootingPhase : MonoBehaviour
         playerBall.OnBallGrounded += ResetPlayerBall;
     }
 
+    private void SwitchBallTo(Ball b, BallType type)
+    {
+        SpawnerM.RemoveBallOfFaction(Faction.Player);
+        Destroy(b.gameObject);
+        SpawnerM.SpawnBall(type, new Vector3(0, 0, 0), Faction.Player);
+        OnNewPlayerBall?.Invoke();
+    }
+
     private void ResetPlayerBall(Ball ball)
     {
         ball.SetPosition(new Vector3(0, 0, 0));
         ball.OnBallGrounded -= ResetPlayerBall;
         SwipeM.HandleListener(GameM.State);
-        if (ScoreM.IsPlayerEnergyBarFull && ball.BallType == GameSettings.BallType.Regular)
+
+        if (ScoreM.IsPlayerEnergyBarFull && IsRegularBall(ball))
         {
-            SpawnerM.RemoveBallOfFaction(Faction.Player);
-            Destroy(ball.gameObject);
-            SpawnerM.SpawnBall(GameSettings.BallType.FireBall, new Vector3(0, 0, 0), Faction.Player);
-            OnNewPlayerBall?.Invoke();
+            SwitchBallTo(ball, BallType.FireBall);
+        }
+        else if (PlayerShoot == ShootType.Fail)
+        {
+            SwitchBallTo(ball, BallType.Regular);
         }
     }
 

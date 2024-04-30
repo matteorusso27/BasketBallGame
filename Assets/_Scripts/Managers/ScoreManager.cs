@@ -19,20 +19,29 @@ public class ScoreManager : Singleton<ScoreManager>
 
     public void Init()
     {
+        SetupListeners();
+        playerEnergyBar = 0;
+        PlayerScoreUpdate?.Invoke(0, 0);
+        EnemyScoreUpdate?.Invoke(0);
+    }
+
+    public void SetupListeners()
+    {
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
         var enemyBall = SpawnerM.GetBallOfFaction(Faction.Enemy);
         ShootingPhase = GameM.ShootingPhase;
 
         ShootingPhase.OnPlayerMissing += ResetPlayerEnergyBar;
-        ShootingPhase.OnNewPlayerBall += () => playerBall.OnScoreUpdate += UpdatePlayerScore;
-
+        ShootingPhase.OnNewPlayerBall += () =>
+        {
+            SpawnerM.GetBallOfFaction(Faction.Player).OnScoreUpdate += UpdatePlayerScore;
+        };
         playerBall.OnScoreUpdate += UpdatePlayerScore;
-        playerBall.OnDestroyBall += () => playerBall.OnScoreUpdate -= UpdatePlayerScore;
+        playerBall.OnDestroyBall += () =>
+        {
+            playerBall.OnScoreUpdate -= UpdatePlayerScore;
+        };
         enemyBall.OnScoreUpdate += UpdateEnemyScore;
-
-        playerEnergyBar = 0;
-        PlayerScoreUpdate?.Invoke(0, 0);
-        EnemyScoreUpdate?.Invoke(0);
     }
 
     public int GetScore(ShootType type)
