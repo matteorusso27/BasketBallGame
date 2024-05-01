@@ -9,7 +9,10 @@ public enum GameState
     Start = 0,
     SpawningInstances = 1,
     ShootingPhase = 2,
-    End = 3
+    Win = 3,
+    Lose = 4,
+    Tie = 5,
+    End = 6
 }
 
 [RequireComponent(typeof(ShootingPhase))]
@@ -48,6 +51,10 @@ public class GameManager : Singleton<GameManager>
             case GameState.ShootingPhase:
                 HandleShooting();
                 break;
+            case GameState.Win:
+            case GameState.Lose:
+            case GameState.Tie:
+                break;
             case GameState.End:
                 break;
         }
@@ -58,10 +65,10 @@ public class GameManager : Singleton<GameManager>
     {
         ShootingPhase.enabled = true;
         ShootingPhase.Init();
-        StartCoroutine(ShootingPhaseTimer(shootingPhaseTimer, GameState.End));
+        StartCoroutine(ShootingPhaseTimer(shootingPhaseTimer));
     }
 
-    private IEnumerator ShootingPhaseTimer(int timer, GameState newState)
+    private IEnumerator ShootingPhaseTimer(int timer)
     {
         int currentTime = 0;
         while (currentTime < timer)
@@ -69,8 +76,21 @@ public class GameManager : Singleton<GameManager>
             OnTimerChange?.Invoke(timer - currentTime++);
             yield return new WaitForSeconds(1f);
         }
-        GameM.ChangeState(newState);
+        HandleEndShootingPhase();
+    }
+
+    private void HandleEndShootingPhase()
+    {
         ShootingPhase.enabled = false;
+
+        if (ScoreM.HasPlayerWon())
+            GameM.ChangeState(GameState.Win);
+        else
+        {
+            if (ScoreM.HasTie()) GameM.ChangeState(GameState.Tie);
+            else
+                GameM.ChangeState(GameState.Lose);
+        }
     }
 
     private void HandleSpawning()

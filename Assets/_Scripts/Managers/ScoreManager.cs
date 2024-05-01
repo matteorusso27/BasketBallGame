@@ -89,4 +89,6 @@ public class ScoreManager : Singleton<ScoreManager>
         playerBall.OnScoreUpdate -= UpdatePlayerScore;
         enemyBall.OnScoreUpdate -= UpdateEnemyScore;
     }
+    public bool HasPlayerWon() => playerScore > enemyScore;
+    public bool HasTie() => playerScore == enemyScore;
 }
