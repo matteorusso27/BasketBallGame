@@ -6,17 +6,16 @@ using static Selectors;
 using static Helpers;
 using static GameSettings;
 
+public enum ShootType
+{
+    Regular,
+    Perfect,
+    Board,
+    Fail,
+    COUNT
+}
 public class ShootingPhase : MonoBehaviour
 {
-    public enum ShootType
-    {
-        Regular,
-        Perfect,
-        Board,
-        Fail,
-        COUNT
-    }
-
     public ShootType PlayerShoot { get; private set; }
     public ShootType EnemyShoot { get; private set; }
     
@@ -73,7 +72,6 @@ public class ShootingPhase : MonoBehaviour
         var playerBall = SpawnerM.GetBallOfFaction(Faction.Player);
         PlayerShoot = GetShootType(normalizedDistance);
 
-        if (PlayerShoot == ShootType.Fail) OnPlayerMissing?.Invoke();
         playerBall.Move(GetFinalShootPosition(PlayerShoot));
         playerBall.OnBallGrounded += ResetPlayerBall;
     }
@@ -91,6 +89,7 @@ public class ShootingPhase : MonoBehaviour
         ball.SetPosition(new Vector3(0, 0, 0));
         ball.OnBallGrounded -= ResetPlayerBall;
         SwipeM.HandleListener(GameM.State);
+        if (PlayerShoot == ShootType.Fail) OnPlayerMissing?.Invoke();
 
         if (ScoreM.IsPlayerEnergyBarFull && IsRegularBall(ball))
         {
@@ -99,6 +98,20 @@ public class ShootingPhase : MonoBehaviour
         else if (PlayerShoot == ShootType.Fail)
         {
             SwitchBallTo(ball, BallType.Regular);
+        }
+    }
+
+    private Vector3 GetFinalShootPosition(ShootType st)
+    {
+        switch (st)
+        {
+            case ShootType.Perfect:
+            case ShootType.Regular:
+                return new Vector3(0, 0, 10);
+            case ShootType.Board:
+                return new Vector3(0, 4.78f, 7.74f);
+            default:
+                return new Vector3(0, 0, 3);
         }
     }
 
@@ -122,20 +135,6 @@ public class ShootingPhase : MonoBehaviour
         else
         {
             return ShootType.Fail;
-        }
-    }
-
-    private Vector3 GetFinalShootPosition(ShootType st)
-    {
-        switch (st)
-        {
-            case ShootType.Perfect:
-            case ShootType.Regular:
-                return new Vector3(0, 0, 10);
-            case ShootType.Board:
-                return new Vector3(0, 4.78f, 7.74f);
-            default:
-                return new Vector3(0, 0, 3);
         }
     }
 }

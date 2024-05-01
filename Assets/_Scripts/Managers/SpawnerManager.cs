@@ -26,7 +26,7 @@ public class SpawnerManager : Singleton<SpawnerManager>
     public Ball GetBallOfFaction(Faction faction)
     {
         var go = SpawnedBalls().Where(x => x.GetComponent<Ball>().Faction == faction).FirstOrDefault();
-        return go.GetComponent<Ball>();
+        return go?.GetComponent<Ball>();
     }
 
     public void RemoveBallOfFaction(Faction faction)
